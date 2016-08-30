@@ -7,7 +7,10 @@
           "<(BULLET_PHYSICS_ROOT)/include/bullet",
           "inc"
       ],
-      "sources": [ "src/bullet.cpp" ]
+      "sources": [
+        "src/bullet.cpp",
+        "src/world.cpp"
+      ]
     }
   ]
 }

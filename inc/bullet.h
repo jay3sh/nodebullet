@@ -1,11 +1,11 @@
 
-#ifndef __NODE_BULLET_H__
-#define __NODE_BULLET_H__
+#ifndef NB_BULLET_H
+#define NB_BULLET_H
 
 #include <nan.h>
 #include "node.h"
 
-namespace nodebullet {
+namespace nb {
 
   using v8::FunctionCallbackInfo;
   using v8::Isolate;
@@ -16,4 +16,4 @@ namespace nodebullet {
 
   void init(Local<Object> exports);
 }
-#endif // __NODE_BULLET_H__
+#endif // NB_BULLET_H
