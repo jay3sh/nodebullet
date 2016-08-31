@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nan.h>
+#include "pointers.h"
 
 namespace mox {
   namespace physics {
@@ -12,6 +13,12 @@ namespace mox {
     private:
       explicit World();
       ~World();
+
+      btDefaultCollisionConfigurationPtr m_collisionConfiguration;
+      btCollisionDispatcherPtr m_collisionDispatcher;
+      btDbvtBroadphasePtr m_dbvtBroadphase;
+      btSequentialImpulseConstraintSolverPtr m_sequentialImpulseConstraintSolver;
+      btDiscreteDynamicsWorldPtr m_discreteDynamicsWorld;
 
       static NAN_METHOD(New);
       

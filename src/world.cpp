@@ -8,35 +8,22 @@ Nan::Persistent<v8::Function> mox::physics::World::constructor;
 
 mox::physics::World::World()
 {
-	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+  m_collisionConfiguration = std::make_shared<btDefaultCollisionConfiguration>();
 
-	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-	btCollisionDispatcher* dispatcher = new	btCollisionDispatcher(collisionConfiguration);
+  m_collisionDispatcher = std::make_shared<btCollisionDispatcher>(m_collisionConfiguration.get());
 
-	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
-	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+  m_dbvtBroadphase = std::make_shared<btDbvtBroadphase>();
 
-	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+  m_sequentialImpulseConstraintSolver =
+    std::make_shared<btSequentialImpulseConstraintSolver>();
 
-	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
+  m_discreteDynamicsWorld = std::make_shared<btDiscreteDynamicsWorld>(
+    m_collisionDispatcher.get(),
+    m_dbvtBroadphase.get(),
+    m_sequentialImpulseConstraintSolver.get(),
+    m_collisionConfiguration.get());
 
-	dynamicsWorld->setGravity(btVector3(0,-9.8,0));
-
-	//delete dynamics world
-	delete dynamicsWorld;
-
-	//delete solver
-	delete solver;
-
-	//delete broadphase
-	delete overlappingPairCache;
-
-	//delete dispatcher
-	delete dispatcher;
-
-	delete collisionConfiguration;
+	m_discreteDynamicsWorld->setGravity(btVector3(0,-9.8,0));
 }
 
 mox::physics::World::~World()
@@ -50,7 +37,6 @@ void mox::physics::World::Init(v8::Local<v8::Object> namespc)
   constructor.Reset(tpl->GetFunction());
   namespc->Set(Nan::New("World").ToLocalChecked(),
     tpl->GetFunction());
-
 }
 
 NAN_METHOD(mox::physics::World::New)
