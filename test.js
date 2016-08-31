@@ -1,4 +1,4 @@
 
-let bullet = require('./build/Debug/bullet');
+let physics = require('./build/Debug/physics');
 
-console.log(new bullet.World());
+console.log(physics, new physics.World());

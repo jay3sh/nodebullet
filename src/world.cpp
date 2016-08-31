@@ -1,11 +1,12 @@
 
 #include "helper.h"
+#include "pointers.h"
 #include "btBulletDynamicsCommon.h"
 #include "world.h"
 
-Nan::Persistent<v8::Function> nb::World::constructor;
+Nan::Persistent<v8::Function> mox::physics::World::constructor;
 
-nb::World::World()
+mox::physics::World::World()
 {
 	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
 	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -21,7 +22,7 @@ nb::World::World()
 
 	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
 
-	dynamicsWorld->setGravity(btVector3(0,-10,0));
+	dynamicsWorld->setGravity(btVector3(0,-9.8,0));
 
 	//delete dynamics world
 	delete dynamicsWorld;
@@ -38,11 +39,11 @@ nb::World::World()
 	delete collisionConfiguration;
 }
 
-nb::World::~World()
+mox::physics::World::~World()
 {
 }
 
-void nb::World::Init(v8::Local<v8::Object> namespc)
+void mox::physics::World::Init(v8::Local<v8::Object> namespc)
 {
   DEFINE_FUNCTION_TEMPLATE("World", tpl);
 
@@ -52,7 +53,7 @@ void nb::World::Init(v8::Local<v8::Object> namespc)
 
 }
 
-NAN_METHOD(nb::World::New)
+NAN_METHOD(mox::physics::World::New)
 {
   ALLOW_ONLY_CONSTRUCTOR(info);
   World *obj = new World();
@@ -61,7 +62,7 @@ NAN_METHOD(nb::World::New)
 }
 
 /*
-v8::Local<v8::Object> nb::World::NewInstance()
+v8::Local<v8::Object> mox::physics::World::NewInstance()
 {
   Nan::EscapableHandleScope scope;
 

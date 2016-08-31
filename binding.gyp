@@ -1,9 +1,9 @@
 {
   "targets": [
     {
-      "target_name": "bullet",
+      "target_name": "physics",
       "include_dirs" : [
-          "<!(node -e \"require('nan')\")",
+        "<!(node -e \"require('nan')\")",
           "<(BULLET_PHYSICS_ROOT)/include/bullet",
           "inc"
       ],
@@ -13,7 +13,8 @@
         "<(BULLET_PHYSICS_ROOT)/lib/LinearMath_Debug.lib"
       ],
       "sources": [
-        "<!@(node -e \"console.log(require('fs').readdirSync('./src').map(f=>'src/'+f).join(' '))\")"
+        "<!@(node -e \"console.log(require('fs').readdirSync('./src').map(f=>'src/'+f).join(' '))\")",
+        "<!@(node -e \"console.log(require('fs').readdirSync('./inc').map(f=>'inc/'+f).join(' '))\")"
       ]
     }
   ]

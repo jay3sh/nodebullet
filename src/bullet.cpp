@@ -3,10 +3,9 @@
 #include "bullet.h"
 #include "world.h"
 
-void nb::init(Local<Object> exports)
+void mox::physics::init(Local<Object> exports)
 {
-  //exports->Set(Nan::New("World").ToLocalChecked(), tess);
-  nb::World::Init(exports);
+  mox::physics::World::Init(exports);
 }
 
-NODE_MODULE(nodebullet, nb::init)
+NODE_MODULE(mox, mox::physics::init)
