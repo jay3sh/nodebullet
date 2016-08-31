@@ -1,4 +1,4 @@
 
-let bullet = require('./build/Release/bullet');
+let bullet = require('./build/Debug/bullet');
 
 console.log(new bullet.World());
