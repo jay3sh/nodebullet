@@ -13,8 +13,7 @@
         "<(BULLET_PHYSICS_ROOT)/lib/LinearMath_Debug.lib"
       ],
       "sources": [
-        "src/bullet.cpp",
-        "src/world.cpp"
+        "<!@(node -e \"console.log(require('fs').readdirSync('./src').map(f=>'src/'+f).join(' '))\")"
       ]
     }
   ]
