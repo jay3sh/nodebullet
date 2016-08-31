@@ -1,6 +1,6 @@
 
 
-#include "bullet.h"
+#include "physics.h"
 #include "world.h"
 
 void mox::physics::init(Local<Object> exports)
