@@ -13,5 +13,7 @@ namespace mox {
     using v8::Value;
 
     void init(Local<Object> exports);
+
+    NAN_METHOD(makeBoxRigidBody);
   }
 }
