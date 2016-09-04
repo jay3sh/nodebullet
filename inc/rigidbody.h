@@ -14,6 +14,9 @@ namespace mox {
 
       btCollisionShapePtr m_collisionShape;
       btTransform m_transform;
+      btDefaultMotionStatePtr m_motionState;
+      btRigidBodyPtr m_rigidBody;
+      double m_mass;
 
     private:
       explicit RigidBody();
@@ -26,7 +29,10 @@ namespace mox {
 
       //static NAN_METHOD(initCylinder);
       //static NAN_METHOD(initSphere);
-      //static NAN_METHOD(translateTo);
+
+      static NAN_METHOD(setMass);
+      static NAN_METHOD(getMass);
+      static NAN_METHOD(translateTo);
 
       static Nan::Persistent<v8::Function> constructor;
     };
