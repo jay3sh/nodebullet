@@ -7,8 +7,7 @@
 void mox::physics::init(Local<Object> exports)
 {
   mox::physics::World::Init(exports);
-
-  Nan::SetMethod(exports, "makeBoxRigidBody", makeBoxRigidBody);
+  mox::physics::RigidBody::Init(exports);
 }
 
 NAN_METHOD(mox::physics::makeBoxRigidBody)

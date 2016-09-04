@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nan.h>
+#include "pointers.h"
 
 namespace mox {
   namespace physics {
@@ -11,12 +12,21 @@ namespace mox {
 
       static v8::Local<v8::Object> NewInstance();
 
+      btCollisionShapePtr m_collisionShape;
+      btTransform m_transform;
+
     private:
       explicit RigidBody();
       ~RigidBody();
 
       static NAN_METHOD(New);
 
+      static NAN_METHOD(initBox);
+      static NAN_METHOD(isBox);
+
+      //static NAN_METHOD(initCylinder);
+      //static NAN_METHOD(initSphere);
+      //static NAN_METHOD(translateTo);
 
       static Nan::Persistent<v8::Function> constructor;
     };

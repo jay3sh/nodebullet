@@ -19,5 +19,8 @@ namespace mox {
 
     typedef std::shared_ptr<btDiscreteDynamicsWorld>
       btDiscreteDynamicsWorldPtr;
+
+    typedef std::shared_ptr<btCollisionShape>
+      btCollisionShapePtr;
   }
 }
