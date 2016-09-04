@@ -21,6 +21,12 @@ void mox::physics::RigidBody::Init(v8::Local<v8::Object> namespc)
 {
   DEFINE_FUNCTION_TEMPLATE("RigidBody", tpl);
 
+  Nan::SetMethod(tpl, "make", make);
+
+  tpl->Set(Nan::New("BOX").ToLocalChecked(), Nan::New(1));
+  tpl->Set(Nan::New("CYLINDER").ToLocalChecked(), Nan::New(2));
+  tpl->Set(Nan::New("SPHERE").ToLocalChecked(), Nan::New(3));
+
   Nan::SetPrototypeMethod(tpl, "initBox", initBox);
   Nan::SetPrototypeMethod(tpl, "isBox", isBox);
 
@@ -39,6 +45,14 @@ NAN_METHOD(mox::physics::RigidBody::New)
   RigidBody *obj = new RigidBody();
   obj->Wrap(info.This());
   info.GetReturnValue().Set(info.This());
+}
+
+NAN_METHOD(mox::physics::RigidBody::make)
+{
+  CHECK_NUM_ARGUMENTS(info, 1);
+
+  v8::Local<v8::Object> def = Nan::To<v8::Object>(info[0]).ToLocalChecked();
+
 }
 
 NAN_METHOD(mox::physics::RigidBody::initBox)

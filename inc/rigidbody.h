@@ -24,6 +24,8 @@ namespace mox {
 
       static NAN_METHOD(New);
 
+      static NAN_METHOD(make);
+
       static NAN_METHOD(initBox);
       static NAN_METHOD(isBox);
 
