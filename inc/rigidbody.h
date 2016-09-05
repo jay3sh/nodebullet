@@ -17,6 +17,7 @@ namespace mox {
       explicit RigidBody();
       ~RigidBody();
 
+      uint32_t m_type;
       btCollisionShapePtr m_collisionShape;
       btTransform m_transform;
       btDefaultMotionStatePtr m_motionState;
@@ -28,16 +29,8 @@ namespace mox {
       static const uint32_t SPHERE = 3;
 
       static NAN_METHOD(New);
-
       static NAN_METHOD(make);
 
-      static NAN_METHOD(initBox);
-      static NAN_METHOD(isBox);
-
-      //static NAN_METHOD(initCylinder);
-      //static NAN_METHOD(initSphere);
-
-      static NAN_METHOD(setMass);
       static NAN_METHOD(getMass);
       static NAN_METHOD(translateTo);
 
