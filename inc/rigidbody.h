@@ -12,6 +12,7 @@ namespace mox {
 
       static v8::Local<v8::Object> NewInstance();
 
+      btRigidBodyPtr getRigidBody() { return m_rigidBody;  }
 
     private:
       explicit RigidBody();
@@ -22,6 +23,7 @@ namespace mox {
       btTransform m_transform;
       btDefaultMotionStatePtr m_motionState;
       btRigidBodyPtr m_rigidBody;
+      bool m_isDynamic;
       double m_mass;
 
       static const uint32_t BOX = 1;

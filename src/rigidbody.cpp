@@ -68,6 +68,8 @@ NAN_METHOD(mox::physics::RigidBody::make)
       Nan::Get(def, keyMass).ToLocalChecked()).FromJust();
   }
 
+  nativeInstance->m_isDynamic = (nativeInstance->m_mass != 0.0f);
+
   // position
   v8::Local<v8::Object> position;
   double x=0, y=0, z=0;
@@ -106,6 +108,23 @@ NAN_METHOD(mox::physics::RigidBody::make)
   case SPHERE:
     break;
   }
+
+  btVector3 localInertia(0, 0, 0);
+  if (nativeInstance->m_isDynamic) {
+    nativeInstance->m_collisionShape->calculateLocalInertia(
+      nativeInstance->m_mass, localInertia);
+  }
+
+  nativeInstance->m_motionState = std::make_shared<btDefaultMotionState>(
+    nativeInstance->m_transform);
+  btRigidBody::btRigidBodyConstructionInfo rbInfo(
+    nativeInstance->m_mass,
+    nativeInstance->m_motionState.get(),
+    nativeInstance->m_collisionShape.get(),
+    localInertia
+  );
+
+  nativeInstance->m_rigidBody = std::make_shared<btRigidBody>(rbInfo);
 
   info.GetReturnValue().Set(instance);
 }

@@ -21,6 +21,8 @@ namespace mox {
       btDiscreteDynamicsWorldPtr m_discreteDynamicsWorld;
 
       static NAN_METHOD(New);
+
+      static NAN_METHOD(addRigidBody);
       
       static Nan::Persistent<v8::Function> constructor;
     };

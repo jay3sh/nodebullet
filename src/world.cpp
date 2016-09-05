@@ -3,6 +3,7 @@
 #include "pointers.h"
 #include "btBulletDynamicsCommon.h"
 #include "world.h"
+#include "rigidbody.h"
 
 Nan::Persistent<v8::Function> mox::physics::World::constructor;
 
@@ -34,6 +35,8 @@ void mox::physics::World::Init(v8::Local<v8::Object> namespc)
 {
   DEFINE_FUNCTION_TEMPLATE("World", tpl);
 
+  Nan::SetPrototypeMethod(tpl, "addRigidBody", addRigidBody);
+
   constructor.Reset(tpl->GetFunction());
   namespc->Set(Nan::New("World").ToLocalChecked(),
     tpl->GetFunction());
@@ -47,16 +50,17 @@ NAN_METHOD(mox::physics::World::New)
   info.GetReturnValue().Set(info.This());
 }
 
-/*
-v8::Local<v8::Object> mox::physics::World::NewInstance()
+NAN_METHOD(mox::physics::World::addRigidBody)
 {
-  Nan::EscapableHandleScope scope;
+  CHECK_NUM_ARGUMENTS(info, 1);
+  GET_SELF(mox::physics::World, self);
 
-  const unsigned argc = 0;
-  v8::Local<v8::Value> argv[] = {};
-  v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
-  v8::Local<v8::Object> instance = cons->NewInstance(argc, argv);
+  if (!info[0]->IsUndefined()) {
+    mox::physics::RigidBody *rigidBody =
+      Nan::ObjectWrap::Unwrap<mox::physics::RigidBody>(info[0]->ToObject());
 
-  return scope.Escape(instance);
+    btRigidBodyPtr btRigidBody = rigidBody->getRigidBody();
+    self->m_discreteDynamicsWorld->addRigidBody(btRigidBody.get());
+  }
+
 }
-*/
