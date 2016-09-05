@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <sstream>
 
 #define INIT_HELPER(name) \
   Nan::HandleScope scope; \
@@ -33,4 +34,11 @@
   (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 #define MOXLOG(msg) \
-  std::cout << "[" << __FILENAME__ << ":" << __LINE__ << "]" << msg << std::endl;
+  std::cout << "[" << __FILENAME__ << ":" << __LINE__ << "] " << msg << std::endl;
+
+#define MOXCHK(condition) \
+  if(!(condition)) { \
+    std::stringstream ss; \
+    ss << "Assertion failed at [" << __FILENAME__ << ":" << __LINE__ << "]"; \
+    Nan::ThrowError(Nan::New(ss.str()).ToLocalChecked()); \
+  }

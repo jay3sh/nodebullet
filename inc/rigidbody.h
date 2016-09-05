@@ -12,15 +12,20 @@ namespace mox {
 
       static v8::Local<v8::Object> NewInstance();
 
+
+    private:
+      explicit RigidBody();
+      ~RigidBody();
+
       btCollisionShapePtr m_collisionShape;
       btTransform m_transform;
       btDefaultMotionStatePtr m_motionState;
       btRigidBodyPtr m_rigidBody;
       double m_mass;
 
-    private:
-      explicit RigidBody();
-      ~RigidBody();
+      static const uint32_t BOX = 1;
+      static const uint32_t CYLINDER = 2;
+      static const uint32_t SPHERE = 3;
 
       static NAN_METHOD(New);
 

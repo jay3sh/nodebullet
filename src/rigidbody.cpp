@@ -23,9 +23,9 @@ void mox::physics::RigidBody::Init(v8::Local<v8::Object> namespc)
 
   Nan::SetMethod(tpl, "make", make);
 
-  tpl->Set(Nan::New("BOX").ToLocalChecked(), Nan::New(1));
-  tpl->Set(Nan::New("CYLINDER").ToLocalChecked(), Nan::New(2));
-  tpl->Set(Nan::New("SPHERE").ToLocalChecked(), Nan::New(3));
+  tpl->Set(Nan::New("BOX").ToLocalChecked(), Nan::New(BOX));
+  tpl->Set(Nan::New("CYLINDER").ToLocalChecked(), Nan::New(CYLINDER));
+  tpl->Set(Nan::New("SPHERE").ToLocalChecked(), Nan::New(SPHERE));
 
   Nan::SetPrototypeMethod(tpl, "initBox", initBox);
   Nan::SetPrototypeMethod(tpl, "isBox", isBox);
@@ -51,8 +51,57 @@ NAN_METHOD(mox::physics::RigidBody::make)
 {
   CHECK_NUM_ARGUMENTS(info, 1);
 
+  v8::Local<v8::Object> instance = NewInstance();
+  RigidBody *nativeInstance = ObjectWrap::Unwrap<RigidBody>(instance);
+
+  v8::Local<v8::String> keyType = Nan::New("type").ToLocalChecked();
+  v8::Local<v8::String> keyDimensions = Nan::New("dimensions").ToLocalChecked();
+  v8::Local<v8::String> keyPosition = Nan::New("position").ToLocalChecked();
+  v8::Local<v8::String> keyMass = Nan::New("mass").ToLocalChecked();
+
   v8::Local<v8::Object> def = Nan::To<v8::Object>(info[0]).ToLocalChecked();
 
+  // type - decides which kind of collision shape this rigid body has
+  MOXCHK(Nan::Has(def, keyType).FromJust());
+  uint32_t type = Nan::To<uint32_t>(Nan::Get(def, keyType).ToLocalChecked()).FromJust();
+
+  v8::Local<v8::Object> dimensions;
+  v8::Local<v8::Object> position;
+  double dx=0, dy=0, dz=0;
+  double x=0, y=0, z=0;
+  double mass = 0.0;
+  if (Nan::Has(def, keyMass).FromJust()) {
+    mass = Nan::To<double>(Nan::Get(def, keyMass).ToLocalChecked()).FromJust();
+  }
+
+  if (Nan::Has(def, keyPosition).FromJust()) {
+    position = Nan::To<v8::Object>(Nan::Get(def, keyPosition)
+      .ToLocalChecked()).ToLocalChecked();
+    x = Nan::To<double>(Nan::Get(position, 0).ToLocalChecked()).FromJust();
+    y = Nan::To<double>(Nan::Get(position, 1).ToLocalChecked()).FromJust();
+    z = Nan::To<double>(Nan::Get(position, 2).ToLocalChecked()).FromJust();
+  }
+
+  switch (type) {
+  case BOX:
+    MOXCHK(Nan::Has(def, keyDimensions).FromJust());
+    dimensions = Nan::To<v8::Object>(Nan::Get(def, keyDimensions)
+      .ToLocalChecked()).ToLocalChecked();
+    dx = Nan::To<double>(Nan::Get(dimensions, 0).ToLocalChecked()).FromJust();
+    dy = Nan::To<double>(Nan::Get(dimensions, 1).ToLocalChecked()).FromJust();
+    dz = Nan::To<double>(Nan::Get(dimensions, 2).ToLocalChecked()).FromJust();
+
+    nativeInstance->m_collisionShape = std::make_shared<btBoxShape>(
+      btVector3(btScalar(dx), btScalar(dy), btScalar(dz)));
+    break;
+
+  case CYLINDER:
+    break;
+  case SPHERE:
+    break;
+  }
+
+  info.GetReturnValue().Set(instance);
 }
 
 NAN_METHOD(mox::physics::RigidBody::initBox)

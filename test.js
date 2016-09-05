@@ -7,4 +7,12 @@ let world = new physics.World();
 
 //console.log(world, box, box.isBox(), box.getMass());
 
-console.log(physics.RigidBody.SPHERE);
+
+let box = physics.RigidBody.make({
+  type: physics.RigidBody.BOX,
+  dimensions: [10, 20, 10],
+  position: [100, 100, 0],
+  mass : 5
+});
+
+console.log(box);
