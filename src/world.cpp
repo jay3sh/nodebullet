@@ -37,6 +37,7 @@ void mox::physics::World::Init(v8::Local<v8::Object> namespc)
 
   Nan::SetPrototypeMethod(tpl, "addRigidBody", addRigidBody);
   Nan::SetPrototypeMethod(tpl, "stepSimulation", stepSimulation);
+  Nan::SetPrototypeMethod(tpl, "analyse", analyse);
 
   constructor.Reset(tpl->GetFunction());
   namespc->Set(Nan::New("World").ToLocalChecked(),
@@ -84,4 +85,27 @@ NAN_METHOD(mox::physics::World::stepSimulation)
 
   self->m_discreteDynamicsWorld->stepSimulation(
     timeStep, maxSubSteps, fixedTimeStep);
+}
+
+NAN_METHOD(mox::physics::World::analyse)
+{
+  GET_SELF(mox::physics::World, self);
+  for (
+    int i = self->m_discreteDynamicsWorld->getNumCollisionObjects() - 1;
+    i >= 0; i--)
+  {
+    btCollisionObject *obj = self->m_discreteDynamicsWorld->getCollisionObjectArray()[i];
+    btRigidBody *body = btRigidBody::upcast(obj);
+    btTransform xform;
+    if (body && body->getMotionState()) {
+      body->getMotionState()->getWorldTransform(xform);
+      MOXLOG("Pos " << i << " = " <<
+        "[" << xform.getOrigin().getX() << ","
+        << xform.getOrigin().getY() << ","
+        << xform.getOrigin().getZ() << "]");
+    } else {
+      xform = obj->getWorldTransform();
+      MOXLOG("x");
+    }
+  }
 }

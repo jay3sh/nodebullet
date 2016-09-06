@@ -150,12 +150,13 @@ NAN_METHOD(mox::physics::RigidBody::setPosition)
 NAN_METHOD(mox::physics::RigidBody::getPosition)
 {
   GET_SELF(mox::physics::RigidBody, self);
-  btVector3 origin = self->m_transform.getOrigin();
-
   v8::Local<v8::Array> position = Nan::New<v8::Array>(3);
-  Nan::Set(position, 0, Nan::New<v8::Number>(origin.getX()));
-  Nan::Set(position, 1, Nan::New<v8::Number>(origin.getY()));
-  Nan::Set(position, 2, Nan::New<v8::Number>(origin.getZ()));
+
+  btTransform xform;
+  self->m_motionState->getWorldTransform(xform);
+  Nan::Set(position, 0, Nan::New<v8::Number>(xform.getOrigin().getX()));
+  Nan::Set(position, 1, Nan::New<v8::Number>(xform.getOrigin().getY()));
+  Nan::Set(position, 2, Nan::New<v8::Number>(xform.getOrigin().getZ()));
 
   info.GetReturnValue().Set(position);
 }
