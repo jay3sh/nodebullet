@@ -21,6 +21,18 @@
     return; \
   }
 
+#define CHECK_NUM_ARGUMENTS_GT(args, length) \
+  if(args.Length() <= length) { \
+    Nan::ThrowError("Wrong number of arguments"); \
+    return; \
+  }
+
+#define CHECK_NUM_ARGUMENTS_LT(args, length) \
+  if(args.Length() >= length) { \
+    Nan::ThrowError("Wrong number of arguments"); \
+    return; \
+  }
+
 #define ALLOW_ONLY_CONSTRUCTOR(info) \
   if(!info.IsConstructCall()) { \
     Nan::ThrowError("Only constructor usage with new is supported"); \

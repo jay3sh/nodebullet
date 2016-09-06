@@ -36,6 +36,7 @@ void mox::physics::World::Init(v8::Local<v8::Object> namespc)
   DEFINE_FUNCTION_TEMPLATE("World", tpl);
 
   Nan::SetPrototypeMethod(tpl, "addRigidBody", addRigidBody);
+  Nan::SetPrototypeMethod(tpl, "stepSimulation", stepSimulation);
 
   constructor.Reset(tpl->GetFunction());
   namespc->Set(Nan::New("World").ToLocalChecked(),
@@ -62,5 +63,25 @@ NAN_METHOD(mox::physics::World::addRigidBody)
     btRigidBodyPtr btRigidBody = rigidBody->getRigidBody();
     self->m_discreteDynamicsWorld->addRigidBody(btRigidBody.get());
   }
+}
 
+NAN_METHOD(mox::physics::World::stepSimulation)
+{
+  CHECK_NUM_ARGUMENTS_GT(info, 0);
+  GET_SELF(mox::physics::World, self);
+
+  double timeStep = Nan::To<double>(info[0]).FromJust();
+
+  int maxSubSteps = 10; // default value
+  if (info.Length() > 1) {
+    maxSubSteps = Nan::To<uint32_t>(info[1]).FromJust();
+  }
+
+  double fixedTimeStep = 1.0 / 60.0; // default value
+  if (info.Length() > 2) {
+    fixedTimeStep = Nan::To<double>(info[2]).FromJust();
+  }
+
+  self->m_discreteDynamicsWorld->stepSimulation(
+    timeStep, maxSubSteps, fixedTimeStep);
 }

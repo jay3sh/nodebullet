@@ -28,7 +28,8 @@ void mox::physics::RigidBody::Init(v8::Local<v8::Object> namespc)
   tpl->Set(Nan::New("SPHERE").ToLocalChecked(), Nan::New(SPHERE));
 
   Nan::SetPrototypeMethod(tpl, "getMass", getMass);
-  Nan::SetPrototypeMethod(tpl, "translateTo", translateTo);
+  Nan::SetPrototypeMethod(tpl, "setPosition", setPosition);
+  Nan::SetPrototypeMethod(tpl, "getPosition", getPosition);
 
   constructor.Reset(tpl->GetFunction());
   namespc->Set(Nan::New("RigidBody").ToLocalChecked(), tpl->GetFunction());
@@ -135,7 +136,7 @@ NAN_METHOD(mox::physics::RigidBody::getMass)
   info.GetReturnValue().Set(Nan::New<v8::Number>(self->m_mass));
 }
 
-NAN_METHOD(mox::physics::RigidBody::translateTo)
+NAN_METHOD(mox::physics::RigidBody::setPosition)
 {
   GET_SELF(mox::physics::RigidBody, self);
   CHECK_NUM_ARGUMENTS(info, 3);
@@ -144,6 +145,19 @@ NAN_METHOD(mox::physics::RigidBody::translateTo)
   double z = info[2]->IsUndefined() ? 0 : Nan::To<double>(info[2]).FromJust();
   self->m_transform.setOrigin(btVector3(x, y, z));
   info.GetReturnValue().Set(info.This());
+}
+
+NAN_METHOD(mox::physics::RigidBody::getPosition)
+{
+  GET_SELF(mox::physics::RigidBody, self);
+  btVector3 origin = self->m_transform.getOrigin();
+
+  v8::Local<v8::Array> position = Nan::New<v8::Array>(3);
+  Nan::Set(position, 0, Nan::New<v8::Number>(origin.getX()));
+  Nan::Set(position, 1, Nan::New<v8::Number>(origin.getY()));
+  Nan::Set(position, 2, Nan::New<v8::Number>(origin.getZ()));
+
+  info.GetReturnValue().Set(position);
 }
 
 v8::Local<v8::Object> mox::physics::RigidBody::NewInstance()

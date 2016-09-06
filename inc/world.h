@@ -23,6 +23,7 @@ namespace mox {
       static NAN_METHOD(New);
 
       static NAN_METHOD(addRigidBody);
+      static NAN_METHOD(stepSimulation);
       
       static Nan::Persistent<v8::Function> constructor;
     };

@@ -34,7 +34,8 @@ namespace mox {
       static NAN_METHOD(make);
 
       static NAN_METHOD(getMass);
-      static NAN_METHOD(translateTo);
+      static NAN_METHOD(setPosition);
+      static NAN_METHOD(getPosition);
 
       static Nan::Persistent<v8::Function> constructor;
     };
